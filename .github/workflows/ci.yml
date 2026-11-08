@@ -44,3 +44,111 @@ jobs:
           name: coverage-report
           path: coverage-html/
           retention-days: 14
+
+  deploy:
+    name: deploy
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger deployment hook
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "::warning ::RENDER_DEPLOY_HOOK_URL secret is not configured. Skipping deploy trigger."
+          else
+            echo "Triggering deployment webhook..."
+            response=$(curl -s -w "\n%{http_code}" -X POST "$DEPLOY_HOOK_URL")
+            http_code=$(echo "$response" | tail -n1)
+            body=$(echo "$response" | sed '$d')
+            echo "Deploy hook response HTTP code: $http_code"
+            echo "Deploy hook body: $body"
+            if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+              echo "Deployment hook triggered successfully."
+            else
+              echo "Deploy hook trigger returned error code $http_code"
+              exit 1
+            fi
+          fi
+
+  smoke-test:
+    name: smoke-test
+    needs: deploy
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Wait for live deployment and run smoke tests
+        env:
+          LIVE_URL: ${{ secrets.LIVE_URL }}
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          if [ -z "$LIVE_URL" ]; then
+            echo "::warning ::LIVE_URL secret is not configured. Skipping smoke-test."
+            exit 0
+          fi
+
+          echo "Target live URL: $LIVE_URL"
+          echo "Expected commit SHA: $EXPECTED_SHA"
+
+          # 1. Wait for deployment to match expected commit SHA
+          max_retries=30
+          wait_seconds=10
+          deployed=false
+
+          echo "Polling $LIVE_URL/health for new commit SHA..."
+          for i in $(seq 1 $max_retries); do
+            response=$(curl -s "$LIVE_URL/health" || true)
+            echo "Attempt $i: $response"
+            current_sha=$(echo "$response" | jq -r '.commit_sha // empty' 2>/dev/null || true)
+            
+            # Allow full match or short SHA match (Render may use full or 7-char SHA)
+            if [ -n "$current_sha" ] && { [ "$current_sha" = "$EXPECTED_SHA" ] || [ "${EXPECTED_SHA:0:7}" = "$current_sha" ] || [ "${current_sha:0:7}" = "${EXPECTED_SHA:0:7}" ]; }; then
+              echo "✓ Deployed commit SHA matches expected: $current_sha"
+              deployed=true
+              break
+            fi
+            sleep $wait_seconds
+          done
+
+          if [ "$deployed" != "true" ]; then
+            echo "::error ::Deployment timed out or SHA did not match after $((max_retries * wait_seconds))s"
+            exit 1
+          fi
+
+          # 2. Check 1: Health endpoint returns 200 OK
+          echo "Executing Check 1: GET /health"
+          health_status=$(curl -s -o /dev/null -w "%{http_code}" "$LIVE_URL/health")
+          if [ "$health_status" -ne 200 ]; then
+            echo "::error ::Health check failed with status $health_status"
+            exit 1
+          fi
+          echo "✓ Check 1 passed: /health returned HTTP 200"
+
+          # 3. Check 2: POST /api/run with factorial(5) == 120
+          echo "Executing Check 2: POST /api/run factorial calculation"
+          fact_res=$(curl -s -X POST "$LIVE_URL/api/run" \
+            -H "Content-Type: application/json" \
+            -d '{"func": "factorial", "args": {"n": 5}}')
+          echo "Response: $fact_res"
+          fact_val=$(echo "$fact_res" | jq -r '.result // empty')
+          if [ "$fact_val" != "120" ]; then
+            echo "::error ::Factorial live check failed. Expected 120, got $fact_val"
+            exit 1
+          fi
+          echo "✓ Check 2 passed: factorial(5) returned 120"
+
+          # 4. Check 3: POST /api/run error handling divide(10, 0) -> 400
+          echo "Executing Check 3: POST /api/run divide by zero error check"
+          div_http_code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$LIVE_URL/api/run" \
+            -H "Content-Type: application/json" \
+            -d '{"func": "divide", "args": {"a": 10, "b": 0}}')
+          if [ "$div_http_code" -ne 400 ]; then
+            echo "::error ::Divide by zero check failed. Expected HTTP 400, got $div_http_code"
+            exit 1
+          fi
+          echo "✓ Check 3 passed: divide by zero returned HTTP 400 as expected"
+          echo "All 3 live smoke tests passed successfully!"
