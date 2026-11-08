@@ -489,11 +489,3 @@ def test_average_periodic_approx():
 def test_average_empty_raises_value_error(empty_numbers):
     with pytest.raises(ValueError, match="^list is empty$"):
         target.average(empty_numbers)
-
-
-# ============================================================================
-# Intentional Failure for Assignment Requirement: "Include one red run from a failing test, then a green fix."
-# ============================================================================
-def test_intentional_failure_for_red_ci_demonstration():
-    """Temporary failing test to trigger a verified Red CI workflow run."""
-    assert False, "Intentional failure for CI red-run requirement"
