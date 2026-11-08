@@ -53,7 +53,7 @@ jobs:
     steps:
       - name: Trigger deployment hook
         env:
-          DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK || secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
           if [ -z "$DEPLOY_HOOK_URL" ]; then
             echo "::warning ::RENDER_DEPLOY_HOOK_URL secret is not configured. Skipping deploy trigger."
