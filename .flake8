@@ -1,0 +1,10 @@
+[flake8]
+max-line-length = 120
+extend-ignore = W292
+exclude =
+    .venv,
+    venv,
+    __pycache__,
+    .git,
+    .pytest_cache,
+    htmlcov
