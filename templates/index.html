@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Target.py Functional Testing & Runner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .glass {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 min-h-screen text-slate-100 font-sans flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="h-10 w-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white text-xl shadow-lg shadow-indigo-500/30">
+          <i class="fa-solid fa-flask-vial"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight text-white">Target Function Runner</h1>
+          <p class="text-xs text-slate-400">Functional Testing • CI/CD • Student ID: 2507207</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Live Health: OK
+        </span>
+        <a href="https://github.com/TaniaAkterLima/functional-testing-2507207" target="_blank" rel="noopener noreferrer" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
+          <i class="fa-brands fa-github text-sm"></i> GitHub Repo
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+    
+    <!-- Controls & Categories -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+      <div>
+        <h2 class="text-2xl font-bold text-white">16 Target Functions</h2>
+        <p class="text-slate-400 text-sm mt-1">Interact with each function, inspect return types, or verify error responses in real time.</p>
+      </div>
+      <div class="flex bg-slate-800/80 p-1 rounded-xl border border-slate-700 text-xs">
+        <button onclick="filterCategory('all')" id="btn-all" class="px-3 py-1.5 rounded-lg font-medium bg-indigo-600 text-white transition">All (16)</button>
+        <button onclick="filterCategory('datatype')" id="btn-datatype" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Data Types (11)</button>
+        <button onclick="filterCategory('math')" id="btn-math" class="px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition">Mathematics (5)</button>
+      </div>
+    </div>
+
+    <!-- Functions Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- 1. is_adult -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#1 Integer</span>
+          <span class="text-xs text-slate-500 font-mono">is_adult(age)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Check Adult Status</h3>
+        <p class="text-xs text-slate-400 mb-4">Returns True if age ≥ 18; negative age raises ValueError.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Age:</label>
+            <input type="number" id="input-is_adult" value="20" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <button onclick="runFunc('is_adult', {age: Number(document.getElementById('input-is_adult').value)})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-is_adult" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 2. celsius_to_fahrenheit -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#2 Float</span>
+          <span class="text-xs text-slate-500 font-mono">celsius_to_fahrenheit(celsius)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Celsius to Fahrenheit</h3>
+        <p class="text-xs text-slate-400 mb-4">Converts °C to °F rounded to 2 decimal places.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Celsius:</label>
+            <input type="number" step="0.1" id="input-celsius_to_fahrenheit" value="25" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <button onclick="runFunc('celsius_to_fahrenheit', {celsius: Number(document.getElementById('input-celsius_to_fahrenheit').value)})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-celsius_to_fahrenheit" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 3. count_vowels -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#3 String</span>
+          <span class="text-xs text-slate-500 font-mono">count_vowels(text)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Count Vowels</h3>
+        <p class="text-xs text-slate-400 mb-4">Counts vowels (a, e, i, o, u) case-insensitively.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Text:</label>
+            <input type="text" id="input-count_vowels" value="Hello, World!" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <button onclick="runFunc('count_vowels', {text: document.getElementById('input-count_vowels').value})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-count_vowels" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 4. invert -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#4 Boolean</span>
+          <span class="text-xs text-slate-500 font-mono">invert(flag)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Invert Flag</h3>
+        <p class="text-xs text-slate-400 mb-4">Returns opposite of boolean; non-bool raises TypeError.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Flag:</label>
+            <select id="input-invert" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+              <option value="true">True</option>
+              <option value="false">False</option>
+            </select>
+          </div>
+          <button onclick="runFunc('invert', {flag: document.getElementById('input-invert').value === 'true'})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-invert" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 5. greet -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#5 None / Optional</span>
+          <span class="text-xs text-slate-500 font-mono">greet(name=None)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Greet Person</h3>
+        <p class="text-xs text-slate-400 mb-4">Greets by name or returns "Hello, Guest!".</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Name (empty for Guest):</label>
+            <input type="text" id="input-greet" placeholder="e.g. Alice or blank" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <button onclick="runFunc('greet', {name: document.getElementById('input-greet').value || null})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-greet" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 6. find_max -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#6 List</span>
+          <span class="text-xs text-slate-500 font-mono">find_max(numbers)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Find Maximum</h3>
+        <p class="text-xs text-slate-400 mb-4">Returns largest number from list; empty raises ValueError.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Numbers (comma-separated):</label>
+            <input type="text" id="input-find_max" value="12, 45, 7, 89, 23" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <button onclick="runFunc('find_max', {numbers: document.getElementById('input-find_max').value})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-find_max" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 7. get_price -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#7 Dictionary</span>
+          <span class="text-xs text-slate-500 font-mono">get_price(prices, item)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Get Item Price</h3>
+        <p class="text-xs text-slate-400 mb-4">Looks up item price in dict; missing item raises KeyError.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Prices JSON:</label>
+            <input type="text" id="input-get_price_dict" value='{"apple": 1.5, "banana": 0.8}' class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 font-mono text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Item Key:</label>
+            <input type="text" id="input-get_price_item" value="apple" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <button onclick="runFunc('get_price', {prices: document.getElementById('input-get_price_dict').value, item: document.getElementById('input-get_price_item').value})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-get_price" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 8. swap -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#8 Tuple</span>
+          <span class="text-xs text-slate-500 font-mono">swap(pair)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Swap Pair</h3>
+        <p class="text-xs text-slate-400 mb-4">Swaps two elements; invalid length raises ValueError.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Pair (2 values, comma-separated):</label>
+            <input type="text" id="input-swap" value="first, second" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <button onclick="runFunc('swap', {pair: document.getElementById('input-swap').value})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-swap" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 9. common_items -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#9 Set</span>
+          <span class="text-xs text-slate-500 font-mono">common_items(set_a, set_b)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Set Intersection</h3>
+        <p class="text-xs text-slate-400 mb-4">Returns common elements found in both sets.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Set A (comma-separated):</label>
+            <input type="text" id="input-common_items_a" value="1, 2, 3, 4" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Set B (comma-separated):</label>
+            <input type="text" id="input-common_items_b" value="3, 4, 5, 6" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <button onclick="runFunc('common_items', {set_a: document.getElementById('input-common_items_a').value, set_b: document.getElementById('input-common_items_b').value})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-common_items" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 10. is_leap_year -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#10 Date</span>
+          <span class="text-xs text-slate-500 font-mono">is_leap_year(year)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Leap Year Check</h3>
+        <p class="text-xs text-slate-400 mb-4">Evaluates Gregorian rules; year &lt; 1 raises ValueError.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Year:</label>
+            <input type="number" id="input-is_leap_year" value="2024" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <button onclick="runFunc('is_leap_year', {year: Number(document.getElementById('input-is_leap_year').value)})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-is_leap_year" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 11. to_int -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-indigo-500/50 transition duration-200" data-category="datatype">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-indigo-400 bg-indigo-950/60 px-2.5 py-0.5 rounded-md border border-indigo-800/50">#11 Type Conv</span>
+          <span class="text-xs text-slate-500 font-mono">to_int(value)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Convert to Integer</h3>
+        <p class="text-xs text-slate-400 mb-4">Converts value to int; booleans explicitly raise TypeError.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Value:</label>
+            <input type="text" id="input-to_int" value="42" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+          </div>
+          <button onclick="runFunc('to_int', {value: document.getElementById('input-to_int').value})" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-to_int" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 12. divide -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-emerald-500/50 transition duration-200" data-category="math">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-md border border-emerald-800/50">#12 Math</span>
+          <span class="text-xs text-slate-500 font-mono">divide(a, b)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Division (a / b)</h3>
+        <p class="text-xs text-slate-400 mb-4">Computes a / b; b = 0 raises ZeroDivisionError.</p>
+        <div class="space-y-3">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">a:</label>
+              <input type="number" step="any" id="input-divide_a" value="10" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">b:</label>
+              <input type="number" step="any" id="input-divide_b" value="2" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+            </div>
+          </div>
+          <button onclick="runFunc('divide', {a: Number(document.getElementById('input-divide_a').value), b: Number(document.getElementById('input-divide_b').value)})" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-divide" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 13. power -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-emerald-500/50 transition duration-200" data-category="math">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-md border border-emerald-800/50">#13 Math</span>
+          <span class="text-xs text-slate-500 font-mono">power(base, exp)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Exponentiation</h3>
+        <p class="text-xs text-slate-400 mb-4">Calculates base ** exponent.</p>
+        <div class="space-y-3">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Base:</label>
+              <input type="number" step="any" id="input-power_base" value="2" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Exponent:</label>
+              <input type="number" step="any" id="input-power_exp" value="8" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+            </div>
+          </div>
+          <button onclick="runFunc('power', {base: Number(document.getElementById('input-power_base').value), exponent: Number(document.getElementById('input-power_exp').value)})" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-power" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 14. square_root -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-emerald-500/50 transition duration-200" data-category="math">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-md border border-emerald-800/50">#14 Math</span>
+          <span class="text-xs text-slate-500 font-mono">square_root(x)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Square Root (√x)</h3>
+        <p class="text-xs text-slate-400 mb-4">Calculates sqrt(x); negative x raises ValueError.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">x:</label>
+            <input type="number" step="any" id="input-square_root" value="16" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+          </div>
+          <button onclick="runFunc('square_root', {x: Number(document.getElementById('input-square_root').value)})" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-square_root" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 15. factorial -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-emerald-500/50 transition duration-200" data-category="math">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-md border border-emerald-800/50">#15 Math</span>
+          <span class="text-xs text-slate-500 font-mono">factorial(n)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Factorial (n!)</h3>
+        <p class="text-xs text-slate-400 mb-4">Computes product of 1..n; negative n raises ValueError.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">n:</label>
+            <input type="number" id="input-factorial" value="5" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+          </div>
+          <button onclick="runFunc('factorial', {n: Number(document.getElementById('input-factorial').value)})" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-factorial" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+      <!-- 16. average -->
+      <div class="func-card bg-slate-850 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-emerald-500/50 transition duration-200" data-category="math">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs font-mono font-semibold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-md border border-emerald-800/50">#16 Math</span>
+          <span class="text-xs text-slate-500 font-mono">average(numbers)</span>
+        </div>
+        <h3 class="font-bold text-base text-slate-100 mb-1">Calculate Average</h3>
+        <p class="text-xs text-slate-400 mb-4">Computes mean of numbers; empty list raises ValueError.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Numbers (comma-separated):</label>
+            <input type="text" id="input-average" value="10, 20, 30, 40" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+          </div>
+          <button onclick="runFunc('average', {numbers: document.getElementById('input-average').value})" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-1.5 rounded-lg text-xs font-semibold shadow transition">Run Function</button>
+          <div id="res-average" class="hidden text-xs rounded-lg p-2.5"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer with Live Deployed Commit SHA requirement -->
+  <footer class="border-t border-slate-800 bg-slate-900/90 py-6 mt-12 text-slate-400 text-xs">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <p>© Functional Testing & Live Deployment CI/CD Pipeline • Individual Assignment</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span>Live Deployed Commit SHA:</span>
+        <span id="footer-sha" class="font-mono bg-slate-950 border border-slate-700 text-emerald-400 px-2.5 py-1 rounded shadow text-xs">
+          {{ commit_sha }}
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Client-side Logic -->
+  <script>
+    async function updateLiveSha() {
+      try {
+        const res = await fetch('/health');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.commit_sha) {
+            document.getElementById('footer-sha').textContent = data.commit_sha;
+          }
+        }
+      } catch (err) {
+        console.warn('Could not update live SHA:', err);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', updateLiveSha);
+
+    function filterCategory(cat) {
+      const cards = document.querySelectorAll('.func-card');
+      const btnAll = document.getElementById('btn-all');
+      const btnData = document.getElementById('btn-datatype');
+      const btnMath = document.getElementById('btn-math');
+
+      [btnAll, btnData, btnMath].forEach(b => {
+        b.className = 'px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition';
+      });
+
+      if (cat === 'all') {
+        btnAll.className = 'px-3 py-1.5 rounded-lg font-medium bg-indigo-600 text-white transition';
+        cards.forEach(c => c.classList.remove('hidden'));
+      } else if (cat === 'datatype') {
+        btnData.className = 'px-3 py-1.5 rounded-lg font-medium bg-indigo-600 text-white transition';
+        cards.forEach(c => c.dataset.category === 'datatype' ? c.classList.remove('hidden') : c.classList.add('hidden'));
+      } else if (cat === 'math') {
+        btnMath.className = 'px-3 py-1.5 rounded-lg font-medium bg-indigo-600 text-white transition';
+        cards.forEach(c => c.dataset.category === 'math' ? c.classList.remove('hidden') : c.classList.add('hidden'));
+      }
+    }
+
+    async function runFunc(funcName, args) {
+      const resEl = document.getElementById('res-' + funcName);
+      resEl.className = 'text-xs rounded-lg p-2.5 bg-slate-800 text-slate-300 flex items-center gap-2 border border-slate-700';
+      resEl.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Executing...';
+      resEl.classList.remove('hidden');
+
+      try {
+        const response = await fetch('/api/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ func: funcName, args: args })
+        });
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          resEl.className = 'text-xs rounded-lg p-2.5 bg-emerald-950/60 border border-emerald-700/60 text-emerald-300';
+          resEl.innerHTML = `
+            <div class="flex items-center justify-between font-mono">
+              <span class="font-bold text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> Result:</span>
+              <span class="text-[10px] text-emerald-500 uppercase tracking-wider font-sans">Success</span>
+            </div>
+            <div class="mt-1 font-mono text-sm font-semibold break-all text-white bg-slate-950/60 p-1.5 rounded border border-emerald-900/50">
+              ${JSON.stringify(data.result, null, 2)}
+            </div>
+          `;
+        } else {
+          resEl.className = 'text-xs rounded-lg p-2.5 bg-rose-950/60 border border-rose-700/60 text-rose-300';
+          resEl.innerHTML = `
+            <div class="flex items-center justify-between font-mono">
+              <span class="font-bold text-rose-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${data.error_type || 'Error'}:</span>
+              <span class="text-[10px] text-rose-500 uppercase tracking-wider font-sans">Failed</span>
+            </div>
+            <div class="mt-1 font-mono text-xs text-rose-200 break-words bg-slate-950/60 p-1.5 rounded border border-rose-900/50">
+              ${data.error || 'Execution failed'}
+            </div>
+          `;
+        }
+      } catch (err) {
+        resEl.className = 'text-xs rounded-lg p-2.5 bg-rose-950/60 border border-rose-700/60 text-rose-300';
+        resEl.innerHTML = `<strong>Network Error:</strong> ${err.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
